@@ -1,12 +1,30 @@
-import yaml from 'js-yaml';
-import fs from 'fs';
+const yaml = require('js-yaml');
+const fs = require('fs');
+
+var argv = require('minimist')(process.argv.slice(2));
 
 try {
-  const sourceFile = '/Users/andrewjordaan/Documents/projects/Howler/config/locales/es.yml';
-  const destFile = 'testEs.yml';
-  const missingKeysFile = "missing_keys.txt";
+  const sourceFile = argv.s ?? argv.source;
+  const destFile = argv.d ?? argv.destination ?? "output.yml";
+  const missingKeysFile = argv.m ?? argv.missingKeys ?? "missing_keys.txt"
+
+  if (!fs.existsSync(missingKeysFile)) {
+    console.log("Cannot find missing key file: " + missingKeysFile);
+    return;
+  }
+
+  if (!sourceFile) {
+    console.log("Source file must be specified")
+    return;
+  }
+
+  if (!fs.existsSync(sourceFile)) {
+    console.log("Cannot find source file: " + sourceFile);
+    return;
+  }
 
   AddOrReplaceKeys(sourceFile, destFile, missingKeysFile);
+
 } catch (e) {
   console.log(e);
 }
