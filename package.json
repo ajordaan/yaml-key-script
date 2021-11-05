@@ -1,0 +1,17 @@
+{
+  "name": "yaml-key-script",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "minimist": "^1.2.5",
+    "yaml": "2.0.0-8"
+  }
+}
