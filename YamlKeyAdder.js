@@ -16,6 +16,31 @@ function addOrReplaceKeys(source, missingKeys) {
   return yaml.dump(doc, { forceQuotes: true, quotingType: '"' })
 }
 
+function tsvToYaml(source, root) {
+  const lines = readFileLines(source);
+  const doc = {};
+  doc[root] = {};
+  
+  for (const line of lines) {
+    const columns = line.split("\t");
+
+    const key = columns[0];
+    const english = columns[1];
+    const foreign = columns[2];
+
+    if (key.includes("[")) {
+      const arrayKey = key.split("[")[0];
+      // Need to remove carriage returns (\r) from strings, not sure why they are there, could be a google docs export thing?
+      addKey(doc[root], arrayKey, foreign.replace("\r", ""), true); 
+    }
+    else {
+      addKey(doc[root], key, foreign.replace("\r", ""));
+    }
+  }
+
+  return yaml.dump(doc, { forceQuotes: true, quotingType: '"' })
+}
+
 function addKey(doc, pathStr, keyValue = null, isArrayKey = false) {
   let obj = doc;
   let childKey = null;
@@ -51,3 +76,4 @@ function readMissingKeys(filename = "missing_keys.txt") {
 
 exports.addOrReplaceKeys = addOrReplaceKeys;
 exports.readMissingKeys = readMissingKeys;
+exports.tsvToYaml = tsvToYaml;
