@@ -10,7 +10,7 @@ function addOrReplaceKeys(source, missingKeys) {
   const doc = yaml.load(source);
 
   for (const key of missingKeys) {
-    addMissingKey(doc, key)
+    addKey(doc, key)
   }
 
   return yaml.dump(doc, { forceQuotes: true, quotingType: '"' })
