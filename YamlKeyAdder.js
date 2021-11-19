@@ -10,13 +10,38 @@ function addOrReplaceKeys(source, missingKeys) {
   const doc = yaml.load(source);
 
   for (const key of missingKeys) {
-    addMissingKey(doc, key)
+    addKey(doc, key)
   }
 
   return yaml.dump(doc, { forceQuotes: true, quotingType: '"' })
 }
 
-function addMissingKey(doc, pathStr) {
+function tsvToYaml(source, root) {
+  const lines = readFileLines(source);
+  const doc = {};
+  doc[root] = {};
+  
+  for (const line of lines) {
+    const columns = line.split("\t");
+
+    const key = columns[0];
+    const english = columns[1];
+    const foreign = columns[2];
+
+    if (key.includes("[")) {
+      const arrayKey = key.split("[")[0];
+      // Need to remove carriage returns (\r) from strings, not sure why they are there, could be a google docs export thing?
+      addKey(doc[root], arrayKey, foreign.replace("\r", ""), true); 
+    }
+    else {
+      addKey(doc[root], key, foreign.replace("\r", ""));
+    }
+  }
+
+  return yaml.dump(doc, { forceQuotes: true, quotingType: '"' })
+}
+
+function addKey(doc, pathStr, keyValue = null, isArrayKey = false) {
   let obj = doc;
   let childKey = null;
   let parentObj = null;
@@ -26,20 +51,29 @@ function addMissingKey(doc, pathStr) {
 
     parentObj = obj
     if (!obj[keyPath[i]]) {
-      obj[keyPath[i]] = {};
+      isArrayKey ? obj[keyPath[i]] = [] : obj[keyPath[i]] = {};
     }
     obj = obj[keyPath[i]];
 
     childKey = keyPath[i];
   }
-  parentObj[childKey] = null;
+  isArrayKey ? parentObj[childKey].push(keyValue) : parentObj[childKey] = keyValue;
 
-  //  console.log("Leaf Key: " + childKey);
+}
+
+function readFileLines(filename) {
+  if (filename.split(".").pop() == "json") {
+    const file = fs.readFileSync(filename, 'utf8');
+    return JSON.parse(file);
+  }
+  else
+    return fs.readFileSync(filename, 'utf8').toString().split("\n");
 }
 
 function readMissingKeys(filename = "missing_keys.txt") {
-  return fs.readFileSync(filename).toString().split("\n");
+  return readFileLines(filename);
 }
 
 exports.addOrReplaceKeys = addOrReplaceKeys;
 exports.readMissingKeys = readMissingKeys;
+exports.tsvToYaml = tsvToYaml;
