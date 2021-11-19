@@ -16,7 +16,7 @@ function addOrReplaceKeys(source, missingKeys) {
   return yaml.dump(doc, { forceQuotes: true, quotingType: '"' })
 }
 
-function addMissingKey(doc, pathStr) {
+function addKey(doc, pathStr, keyValue = null, isArrayKey = false) {
   let obj = doc;
   let childKey = null;
   let parentObj = null;
@@ -26,13 +26,15 @@ function addMissingKey(doc, pathStr) {
 
     parentObj = obj
     if (!obj[keyPath[i]]) {
-      obj[keyPath[i]] = {};
+      isArrayKey ? obj[keyPath[i]] = [] : obj[keyPath[i]] = {};
     }
     obj = obj[keyPath[i]];
 
     childKey = keyPath[i];
   }
-  parentObj[childKey] = null;
+  isArrayKey ? parentObj[childKey].push(keyValue) : parentObj[childKey] = keyValue;
+
+}
 
   //  console.log("Leaf Key: " + childKey);
 }
