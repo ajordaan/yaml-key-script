@@ -36,11 +36,17 @@ function addKey(doc, pathStr, keyValue = null, isArrayKey = false) {
 
 }
 
-  //  console.log("Leaf Key: " + childKey);
+function readFileLines(filename) {
+  if (filename.split(".").pop() == "json") {
+    const file = fs.readFileSync(filename, 'utf8');
+    return JSON.parse(file);
+  }
+  else
+    return fs.readFileSync(filename, 'utf8').toString().split("\n");
 }
 
 function readMissingKeys(filename = "missing_keys.txt") {
-  return fs.readFileSync(filename).toString().split("\n");
+  return readFileLines(filename);
 }
 
 exports.addOrReplaceKeys = addOrReplaceKeys;
