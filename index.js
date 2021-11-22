@@ -36,7 +36,7 @@ function importYaml() {
     return;
   }
 
-  const yaml = yamlKeyAdder.tsvToYaml(sourceFile, root);
+  const yaml = yamlKeyAdder.tsvToYaml(yamlKeyAdder.readFileLines(sourceFile), root);
 
   fs.writeFile(destFile, yaml, () => { console.log(`Output written to ${destFile}`) });
 }

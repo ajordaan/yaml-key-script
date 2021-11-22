@@ -17,7 +17,7 @@ function addOrReplaceKeys(source, missingKeys) {
 }
 
 function tsvToYaml(source, root) {
-  const lines = readFileLines(source);
+  const lines = source;
   const doc = {};
   doc[root] = {};
   
@@ -77,3 +77,4 @@ function readMissingKeys(filename = "missing_keys.txt") {
 exports.addOrReplaceKeys = addOrReplaceKeys;
 exports.readMissingKeys = readMissingKeys;
 exports.tsvToYaml = tsvToYaml;
+exports.readFileLines = readFileLines;
