@@ -13,6 +13,9 @@ switch (action) {
   case "import":
     importYaml();
     break;
+    case "export":
+      exportTsv();
+      break;
   case "add":
   case "addKeys":
     addMissingKeys();
@@ -39,6 +42,27 @@ function importYaml() {
   const yaml = yamlKeyAdder.tsvToYaml(yamlKeyAdder.readFileLines(sourceFile), root);
 
   fs.writeFile(destFile, yaml, () => { console.log(`Output written to ${destFile}`) });
+}
+
+function exportTsv() {
+  const sourceFile = argv.s ?? argv.source;
+  const destFile = argv.d ?? argv.destination ?? "translations.tsv";
+  const foreignLanguage = argv.l ?? argv.foreignLanguage ?? "";
+  const root = argv.r ?? argv.root ?? "en";
+
+  if (!sourceFile) {
+    console.log("Source file must be specified")
+    return;
+  }
+
+  if (!fs.existsSync(sourceFile)) {
+    console.log("Cannot find source file: " + sourceFile);
+    return;
+  }
+
+  const tsv = yamlKeyAdder.yamlToTsv(fs.readFileSync(sourceFile, 'utf8'), root, foreignLanguage);
+
+  fs.writeFileSync(destFile, tsv);
 }
 
 function addMissingKeys() {
