@@ -20,7 +20,7 @@ function tsvToYaml(source, root) {
   const lines = source;
   const doc = {};
   doc[root] = {};
-  
+
   for (const line of lines) {
     const columns = line.split("\t");
 
@@ -31,7 +31,7 @@ function tsvToYaml(source, root) {
     if (key.includes("[")) {
       const arrayKey = key.split("[")[0];
       // Need to remove carriage returns (\r) from strings, not sure why they are there, could be a google docs export thing?
-      addKey(doc[root], arrayKey, foreign.replace("\r", ""), true); 
+      addKey(doc[root], arrayKey, foreign.replace("\r", ""), true);
     }
     else {
       addKey(doc[root], key, foreign.replace("\r", ""));
