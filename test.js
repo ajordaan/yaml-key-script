@@ -86,22 +86,29 @@ test('Null out existing parent', () => {
 });
 
 test('Import simple object from tsv', () => {
-const tsv = ["path.to.key\tenglish value\tforeign value"];
+  const tsv = ["headers", "path.to.key\tenglish value\tforeign value"];
 
-const res = yamlOperations.tsvToYaml(tsv,"root");
+  const res = yamlOperations.tsvToYaml(tsv, "root");
 
-const yaml = `root:
+  const yaml = `root:
   path:
     to:
       key: "foreign value"
 `;
 
-expect(res).toBe(yaml);
+  expect(res).toBe(yaml);
 });
 
 test('Import arrays and objects from tsv', () => {
-  const res = yamlOperations.tsvToYaml(yamlOperations.readFileLines("test/arraysAndObjects.tsv"),"root");
-  const expected = fs.readFileSync("test/arraysAndObjects.yml").toString();
-  
+  const res = yamlOperations.tsvToYaml(yamlOperations.readFileLines("test/import/arraysAndObjects.tsv"), "root");
+  const expected = fs.readFileSync("test/import/arraysAndObjects.yml").toString();
+
   expect(res).toBe(expected);
-  });
+});
+
+test('Export arrays and objects to tsv', () => {
+  const res = yamlOperations.yamlToTsv(fs.readFileSync("test/export/arraysAndObjects.yml"), "root", "Foreign Language");
+  const expected = fs.readFileSync("test/export/arraysAndObjects.tsv").toString();
+
+  expect(res).toBe(expected);
+});
