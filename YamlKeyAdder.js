@@ -41,6 +41,42 @@ function tsvToYaml(source, root) {
   return yaml.dump(doc, { forceQuotes: true, quotingType: '"' })
 }
 
+function yamlToTsv(source, root, foreignLanguage) {
+  const doc = yaml.load(source);
+
+  const flatObject = flattenObject(doc[root]);
+
+  let tsv = `Key\tEnglish\t${foreignLanguage}\n`;
+
+  for (const key in flatObject) {
+    tsv += `${key}\t${flatObject[key]}\t\n`
+  }
+
+  return tsv;
+}
+
+function flattenObject(ob) {
+  const toReturn = {};
+
+  for (const i in ob) {
+    let isArray = false;
+    if (!ob.hasOwnProperty(i)) continue;
+
+    if ((typeof ob[i]) == 'object' && ob[i] !== null) {
+      isArray = Array.isArray(ob[i]);
+      var flatObject = flattenObject(ob[i]);
+
+      for (const x in flatObject) {
+        if (!flatObject.hasOwnProperty(x)) continue;
+        isArray ? toReturn[`${i}[${x}]`] = flatObject[x] : toReturn[`${i}.${x}`] = flatObject[x];
+      }
+    } else {
+      toReturn[i] = ob[i];
+    }
+  }
+  return toReturn;
+}
+
 function addKey(doc, pathStr, keyValue = null, isArrayKey = false) {
   let obj = doc;
   let childKey = null;
@@ -78,3 +114,4 @@ exports.addOrReplaceKeys = addOrReplaceKeys;
 exports.readMissingKeys = readMissingKeys;
 exports.tsvToYaml = tsvToYaml;
 exports.readFileLines = readFileLines;
+exports.yamlToTsv = yamlToTsv;
