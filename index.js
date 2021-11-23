@@ -1,5 +1,5 @@
 const fs = require('fs');
-const yamlKeyAdder = require('./YamlKeyAdder');
+const yamlOperations = require('./YamlOperations');
 var argv = require('minimist')(process.argv.slice(2));
 
 const action = argv.a ?? argv.action;
@@ -39,7 +39,7 @@ function importYaml() {
     return;
   }
 
-  const yaml = yamlKeyAdder.tsvToYaml(yamlKeyAdder.readFileLines(sourceFile), root);
+  const yaml = yamlOperations.tsvToYaml(yamlOperations.readFileLines(sourceFile), root);
 
   fs.writeFile(destFile, yaml, () => { console.log(`Output written to ${destFile}`) });
 }
@@ -60,7 +60,7 @@ function exportTsv() {
     return;
   }
 
-  const tsv = yamlKeyAdder.yamlToTsv(fs.readFileSync(sourceFile, 'utf8'), root, foreignLanguage);
+  const tsv = yamlOperations.yamlToTsv(fs.readFileSync(sourceFile, 'utf8'), root, foreignLanguage);
 
   fs.writeFileSync(destFile, tsv);
 }
@@ -85,7 +85,7 @@ function addMissingKeys() {
       console.log("Cannot find source file: " + sourceFile);
       return;
     }
-    const newYaml = yamlKeyAdder.addOrReplaceKeys(fs.readFileSync(sourceFile, 'utf8'), yamlKeyAdder.readMissingKeys(missingKeysFile));
+    const newYaml = yamlOperations.addOrReplaceKeys(fs.readFileSync(sourceFile, 'utf8'), yamlOperations.readMissingKeys(missingKeysFile));
 
     fs.writeFile(destFile, newYaml, () => { console.log(`Output written to ${destFile}`) });
 

@@ -1,4 +1,4 @@
-const yamlKeyAdder = require("./YamlKeyAdder");
+const yamlOperations = require("./YamlOperations");
 
 test('Add a new key to root', () => {
   const yaml = `root:
@@ -10,7 +10,7 @@ test('Add a new key to root', () => {
   key2: null
 `;
 
-  const res = yamlKeyAdder.addOrReplaceKeys(yaml, missingKeys);
+  const res = yamlOperations.addOrReplaceKeys(yaml, missingKeys);
   expect(res).toBe(output);
 });
 
@@ -27,7 +27,7 @@ test('Add a new nested key to root', () => {
       child2: null
 `;
 
-  const res = yamlKeyAdder.addOrReplaceKeys(yaml, missingKeys);
+  const res = yamlOperations.addOrReplaceKeys(yaml, missingKeys);
   expect(res).toBe(output);
 });
 
@@ -47,7 +47,7 @@ test('Add a new nested key to existing parent', () => {
         child2: null
 `;
 
-  const res = yamlKeyAdder.addOrReplaceKeys(yaml, missingKeys);
+  const res = yamlOperations.addOrReplaceKeys(yaml, missingKeys);
   expect(res).toBe(output);
 });
 
@@ -65,7 +65,7 @@ test('Null out existing key', () => {
       existing_child: null
 `;
 
-  const res = yamlKeyAdder.addOrReplaceKeys(yaml, missingKeys);
+  const res = yamlOperations.addOrReplaceKeys(yaml, missingKeys);
   expect(res).toBe(output);
 });
 
@@ -81,6 +81,37 @@ test('Null out existing parent', () => {
   key1: null
 `;
 
-  const res = yamlKeyAdder.addOrReplaceKeys(yaml, missingKeys);
+  const res = yamlOperations.addOrReplaceKeys(yaml, missingKeys);
   expect(res).toBe(output);
 });
+
+test('Import simple object from tsv', () => {
+const tsv = ["path.to.key\tenglish value\tforeign value"];
+
+const res = yamlOperations.tsvToYaml(tsv,"root");
+
+const yaml = `root:
+  path:
+    to:
+      key: "foreign value"
+`;
+
+expect(res).toBe(yaml);
+});
+
+test('Import simple object from tsv', () => {
+  const tsv = ["path.to.key[0]\tenglish value\tforeign value 1", "path.to.key[1]\tenglish value\tforeign value 2", "path.to.key[2]\tenglish value\tforeign value 3"];
+  
+  const res = yamlOperations.tsvToYaml(tsv,"root");
+  
+  const yaml = `root:
+    path:
+      to:
+        key:
+          - foreign value 1
+          - foreign value 2
+          - foreign value 3
+  `;
+  
+  expect(res).toBe(yaml);
+  });
