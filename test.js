@@ -1,5 +1,5 @@
 const yamlOperations = require("./YamlOperations");
-
+const fs = require('fs');
 test('Add a new key to root', () => {
   const yaml = `root:
     key1: null`;
@@ -99,19 +99,9 @@ const yaml = `root:
 expect(res).toBe(yaml);
 });
 
-test('Import simple object from tsv', () => {
-  const tsv = ["path.to.key[0]\tenglish value\tforeign value 1", "path.to.key[1]\tenglish value\tforeign value 2", "path.to.key[2]\tenglish value\tforeign value 3"];
+test('Import arrays and objects from tsv', () => {
+  const res = yamlOperations.tsvToYaml(yamlOperations.readFileLines("test/arraysAndObjects.tsv"),"root");
+  const expected = fs.readFileSync("test/arraysAndObjects.yml").toString();
   
-  const res = yamlOperations.tsvToYaml(tsv,"root");
-  
-  const yaml = `root:
-    path:
-      to:
-        key:
-          - foreign value 1
-          - foreign value 2
-          - foreign value 3
-  `;
-  
-  expect(res).toBe(yaml);
+  expect(res).toBe(expected);
   });

@@ -1,0 +1,18 @@
+date.formats.default	%Y-%m-%d	%Y-%m-%d
+date.formats.short	%b %d	%b %d
+date.formats.long	%B %d, %Y	%B %d, %Y
+date.formats.long_alt	%d %B %Y	%d %B %Y
+date.day_names[0]	Sunday	Domingo
+date.day_names[1]	Monday	Segunda-feira
+date.day_names[2]	Tuesday	Terça-feira 
+date.day_names[3]	Wednesday	Quarta-feira
+date.day_names[4]	Thursday	Quinta-feira
+date.day_names[5]	Friday	Sexta-feira
+date.day_names[6]	Saturday	Sábado
+date.abbr_day_names[0]	Sun	Dom.
+date.abbr_day_names[1]	Mon	Seg.
+date.abbr_day_names[2]	Tue	Ter.
+date.abbr_day_names[3]	Wed	Qua.
+date.abbr_day_names[4]	Thu	Qui.
+date.abbr_day_names[5]	Fri	Sex.
+date.abbr_day_names[6]	Sat	Sáb.
