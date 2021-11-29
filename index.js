@@ -13,9 +13,9 @@ switch (action) {
   case "import":
     importYaml();
     break;
-    case "export":
-      exportTsv();
-      break;
+  case "export":
+    exportTsv();
+    break;
   case "add":
   case "addKeys":
     addMissingKeys();

@@ -17,7 +17,7 @@ function addOrReplaceKeys(source, missingKeys) {
 }
 
 function tsvToYaml(source, root) {
-  
+
   source.shift(); // Remove first line to get rid of headers
   const lines = source;
   const doc = {};
