@@ -1,0 +1,12 @@
+Key	English	Foreign	Language
+date.formats.default	%Y-%m-%d	%Y-%m-%d
+date.formats.short	%b %d	%b %d
+date.formats.long	%B %d, %Y	%B %d, %Y
+date.formats.long_alt	%d %B %Y	%d %B %Y
+date.formats.days.one	%{count} day	%{count} feira
+date.formats.days.other	%{count} days	% {count} feiras
+ticket_purchase.success	Congrats %{name}, you brought a %{ticket} for %{event}	você comprou um %{ticket} para o %{event}, %{name}
+ticket_purchase.transfer_fee	Transfer fee is %{transfer_fee}	Taxa de transferência é %{Transfer_fee}
+ticket_purchase.display_entries	Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total	Para o %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total
+ticket_purchase.display_entries_errors	Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total	Para o %{entry_name} <b>%{first}&nbsp;-&nbsp;%{lastera}</b> of <b>%{total}</b> in total
+ticket_purchase.missing_variable	This %{string} is missing a %{variable}	This ${string} is missing a variable

@@ -96,14 +96,14 @@ test('Import simple object from tsv', () => {
       key: "foreign value"
 `;
 
-  expect(res).toBe(yaml);
+  expect(res.yaml).toBe(yaml);
 });
 
 test('Import arrays and objects from tsv', () => {
   const res = yamlOperations.tsvToYaml(yamlOperations.readFileLines("test/import/arraysAndObjects.tsv"), "root");
   const expected = fs.readFileSync("test/import/arraysAndObjects.yml").toString();
 
-  expect(res).toBe(expected);
+  expect(res.yaml).toBe(expected);
 });
 
 test('Export arrays and objects to tsv', () => {
@@ -111,4 +111,32 @@ test('Export arrays and objects to tsv', () => {
   const expected = fs.readFileSync("test/export/arraysAndObjects.tsv").toString();
 
   expect(res).toBe(expected);
+});
+
+test('Import broken variables from tsv', () => {
+  const res = yamlOperations.tsvToYaml(yamlOperations.readFileLines("test/import/variables.tsv"), "root");
+  const expected = fs.readFileSync("test/import/variables.yml").toString();
+
+  expect(res.yaml).toBe(expected);
+
+  const errors = [
+    {
+        "key": "date.formats.days.other",
+        "lineNumber": 7
+    },
+    {
+        "key": "ticket_purchase.transfer_fee",
+        "lineNumber": 9
+    },
+    {
+        "key": "ticket_purchase.display_entries_errors",
+        "lineNumber": 11
+    },
+    {
+        "key": "ticket_purchase.missing_variable",
+        "lineNumber": 12
+    }
+];
+
+  expect(res.errors).toStrictEqual(errors);
 });

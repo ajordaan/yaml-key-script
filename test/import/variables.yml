@@ -1,0 +1,16 @@
+root:
+  date:
+    formats:
+      default: "%Y-%m-%d"
+      short: "%b %d"
+      long: "%B %d, %Y"
+      long_alt: "%d %B %Y"
+      days:
+        one: "%{count} feira"
+        other: "% {count} feiras"
+  ticket_purchase:
+    success: "você comprou um %{ticket} para o %{event}, %{name}"
+    transfer_fee: "Taxa de transferência é %{Transfer_fee}"
+    display_entries: "Para o %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total"
+    display_entries_errors: "Para o %{entry_name} <b>%{first}&nbsp;-&nbsp;%{lastera}</b> of <b>%{total}</b> in total"
+    missing_variable: "This ${string} is missing a variable"
