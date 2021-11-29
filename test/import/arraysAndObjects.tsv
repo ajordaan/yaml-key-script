@@ -3,6 +3,8 @@ date.formats.default	%Y-%m-%d	%Y-%m-%d
 date.formats.short	%b %d	%b %d
 date.formats.long	%B %d, %Y	%B %d, %Y
 date.formats.long_alt	%d %B %Y	%d %B %Y
+date.formats.days.one	%{count} day	%{count} feira
+date.formats.days.other	%{count} days	%{count} feiras
 date.day_names[0]	Sunday	Domingo
 date.day_names[1]	Monday	Segunda-feira
 date.day_names[2]	Tuesday	Terça-feira 

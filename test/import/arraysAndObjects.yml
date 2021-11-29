@@ -5,6 +5,9 @@ root:
       short: "%b %d"
       long: "%B %d, %Y"
       long_alt: "%d %B %Y"
+      days:
+        one: "%{count} feira"
+        other: "%{count} feiras"
     day_names:
       - "Domingo"
       - "Segunda-feira"
