@@ -28,7 +28,7 @@ function importYaml() {
   const sourceFile = argv.s ?? argv.source;
   const destFile = argv.d ?? argv.destination ?? "output.yml";
   const root = argv.r ?? argv.root;
-
+  const errorsFile = "errors.json"
   if (!sourceFile) {
     console.log("Source file must be specified")
     return;
@@ -40,8 +40,16 @@ function importYaml() {
   }
 
   const yaml = yamlOperations.tsvToYaml(yamlOperations.readFileLines(sourceFile), root);
+  if(yaml.errors.length > 0) {
+    fs.writeFileSync("errors.json", JSON.stringify(yaml.errors));
+    console.log(`${yaml.errors.length} errors written to ${errorsFile}`)
+  }
+  else {
+    console.log("SUCCESS");
+  }
 
-  fs.writeFile(destFile, yaml, () => { console.log(`Output written to ${destFile}`) });
+  fs.writeFileSync(destFile, yaml.yaml);
+  console.log(`Output written to ${destFile}`)
 }
 
 function exportTsv() {

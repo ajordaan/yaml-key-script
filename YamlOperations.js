@@ -22,6 +22,8 @@ function tsvToYaml(source, root) {
   const lines = source;
   const doc = {};
   doc[root] = {};
+  const interpolationVariableErrors = [];
+  let lineNumber = 2;
 
   for (const line of lines) {
     const columns = line.split("\t");
@@ -29,6 +31,15 @@ function tsvToYaml(source, root) {
     const key = columns[0];
     const english = columns[1];
     const foreign = columns[2];
+
+    if (english.includes("%{")) {
+      const englishVariables = extractInterpolationVariables(english);
+      const foreignVariables = extractInterpolationVariables(foreign);
+      if (!compareInterpolationVariables(englishVariables, foreignVariables)) {
+        interpolationVariableErrors.push({ key, lineNumber })
+      }
+
+    }
 
     if (key.includes("[")) {
       const arrayKey = key.split("[")[0];
@@ -38,9 +49,11 @@ function tsvToYaml(source, root) {
     else {
       addKey(doc[root], key, foreign.replace("\r", ""));
     }
+
+    lineNumber++;
   }
 
-  return yaml.dump(doc, { forceQuotes: true, quotingType: '"' })
+  return { yaml: yaml.dump(doc, { forceQuotes: true, quotingType: '"' }), errors: interpolationVariableErrors };
 }
 
 function yamlToTsv(source, root, foreignLanguage) {
@@ -55,6 +68,30 @@ function yamlToTsv(source, root, foreignLanguage) {
   }
 
   return tsv;
+}
+
+function extractInterpolationVariables(value) {
+  const REGEX_EXP = /%{[^}]+}/g;
+  const variables = value.match(REGEX_EXP);
+
+  return variables;
+}
+
+function compareInterpolationVariables(english, foreign) {
+  if(!foreign) return false;
+  if (english.length !== foreign.length) return false;
+
+  for (const engVariable of english) {
+    let found = false;
+    for (const foreignVariable of foreign) {
+      if (foreignVariable === engVariable)
+        found = true;
+    }
+
+    if (!found) return false;
+  }
+
+  return true;
 }
 
 function flattenObject(ob) {
