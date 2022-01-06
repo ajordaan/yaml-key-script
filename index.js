@@ -20,7 +20,9 @@ switch (action) {
   case "addKeys":
     addMissingKeys();
     break;
-
+  case "null":
+    getKeysWithNullValue();
+    break;
   default: console.log("Invalid action")
 }
 
@@ -31,6 +33,11 @@ function importYaml() {
   const errorsFile = "errors.json"
   if (!sourceFile) {
     console.log("Source file must be specified")
+    return;
+  }
+
+  if (!fs.existsSync(sourceFile)) {
+    console.log("Cannot find source file: " + sourceFile);
     return;
   }
 
@@ -60,6 +67,11 @@ function exportTsv() {
 
   if (!sourceFile) {
     console.log("Source file must be specified")
+    return;
+  }
+
+  if (!fs.existsSync(sourceFile)) {
+    console.log("Cannot find source file: " + sourceFile);
     return;
   }
 
@@ -99,5 +111,47 @@ function addMissingKeys() {
 
   } catch (e) {
     console.log(e);
+  }
+}
+
+function getKeysWithNullValue() {
+  try {
+    const sourceFile = argv.s ?? argv.source;
+    const referenceFile = argv.ref ?? argv.reference;
+    const destFile = argv.d ?? argv.destination ?? "null_keys.tsv";
+    const sourceRoot = argv.sr ?? argv.sourceRoot;
+    const referenceRoot = argv.rr ?? argv.referenceRoot;
+
+    if (!sourceFile) {
+      console.log("Source file must be specified")
+      return;
+    }
+    if (!fs.existsSync(sourceFile)) {
+      console.log("Cannot find source file: " + sourceFile);
+      return;
+    }
+    if (!referenceFile) {
+      console.log("Reference File must be specified")
+      return;
+    }
+    if (!fs.existsSync(referenceFile)) {
+      console.log("Cannot find Reference File: " + sourceFile);
+      return;
+    }
+    if (!sourceRoot) {
+      console.log("Source Root key must be specified")
+      return;
+    }
+    if (!referenceRoot) {
+      console.log("Reference Root key must be specified")
+      return;
+    }
+
+    const nullKeys = yamlOperations.getKeysWithNullValue(fs.readFileSync(sourceFile), sourceRoot);
+    const output = yamlOperations.nullKeysToTsv(nullKeys,fs.readFileSync(referenceFile), referenceRoot)
+    fs.writeFileSync(destFile, output);
+
+  } catch (error) {
+    console.log(error)
   }
 }

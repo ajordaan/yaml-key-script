@@ -70,6 +70,33 @@ function yamlToTsv(source, root, foreignLanguage) {
   return tsv;
 }
 
+function getKeysWithNullValue(source, root) {
+  const doc = yaml.load(source);
+  const flatObject = flattenObject(doc[root]);
+  const nullKeys = []
+
+  for (const key in flatObject) {
+    if(!flatObject[key])
+      nullKeys.push(key)
+  }
+
+  return nullKeys
+
+}
+
+function nullKeysToTsv(keys, reference, root) {
+  const foreignLanguage = "";
+  const doc = yaml.load(reference);
+  const flatObject = flattenObject(doc[root]);
+
+  let tsv = `Key\tEnglish\t${foreignLanguage}\n`;
+  for (const key of keys) {
+    tsv += `${key}\t${flatObject[key]}\t\n`
+  }
+
+  return tsv;
+}
+
 function extractInterpolationVariables(value) {
   const REGEX_EXP = /%{[^}]+}/g;
   const variables = value.match(REGEX_EXP);
@@ -154,3 +181,5 @@ exports.readMissingKeys = readMissingKeys;
 exports.tsvToYaml = tsvToYaml;
 exports.readFileLines = readFileLines;
 exports.yamlToTsv = yamlToTsv;
+exports.getKeysWithNullValue = getKeysWithNullValue;
+exports.nullKeysToTsv = nullKeysToTsv;
