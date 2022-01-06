@@ -1,0 +1,12 @@
+root:
+  parent:
+    child1: "Foo"
+    child2: null
+  key: null
+  ticket_purchase:
+    name: "Ticket"
+    date: null
+    type: "Ticket"
+    success:
+      message: "Success"
+      title: null

@@ -1,0 +1,12 @@
+root:
+  parent:
+    child1: "Foo"
+    child2: "I am a child"
+  key: "foobar"
+  ticket_purchase:
+    name: "Ticket"
+    date: "1 January"
+    type: "Ticket"
+    success:
+      message: "Success"
+      title: "Ticket Purchased Successfully"

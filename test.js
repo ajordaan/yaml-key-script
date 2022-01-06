@@ -140,3 +140,24 @@ test('Import broken variables from tsv', () => {
 
   expect(res.errors).toStrictEqual(errors);
 });
+
+test('Get keys with null values', () => {
+  const res = yamlOperations.getKeysWithNullValue(fs.readFileSync("test/export/nullKeys.yml"),"root");
+
+  const expected = ['parent.child2', 'key', 'ticket_purchase.date', 'ticket_purchase.success.title'];
+
+  expect(res).toEqual(expected)
+
+  const res2 = yamlOperations.getKeysWithNullValue(fs.readFileSync("test/import/arraysAndObjects.yml"),"root");
+
+  expect(res2).toEqual([])
+});
+
+test('Export keys with null values', () => {
+  const keys = yamlOperations.getKeysWithNullValue(fs.readFileSync("test/export/nullKeys.yml"),"root");
+  const output = yamlOperations.nullKeysToTsv(keys,fs.readFileSync("test/export/nullKeysReference.yml"),"root")
+  const expected = fs.readFileSync("test/export/nullKeys.tsv").toString();
+
+  expect(output).toEqual(expected)
+
+});
